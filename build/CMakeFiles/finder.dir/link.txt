@@ -1,0 +1,1 @@
+/usr/bin/gcc    CMakeFiles/finder.dir/finder.c.o  -o finder 
