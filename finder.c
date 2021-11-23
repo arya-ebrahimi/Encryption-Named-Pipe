@@ -1,5 +1,62 @@
 #include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>  
+
 
 int main() {
-    printf("finder");
+
+    const char *pipe_file2 = "/tmp/pipe_ab";
+    int fd2 = open(pipe_file2, O_RDONLY);
+    char str[100];
+    read(fd2, str, 100);
+    close(fd2);
+
+    const char *pipe_file = "/tmp/pipe_b";
+    int fd = open(pipe_file, O_RDONLY);
+    char str2[100];
+    read(fd, str2, 100);
+    close(fd);
+    char *token = strtok(str2, "$");
+    char result[200];
+
+    int j = 0;
+    while (token != NULL)
+    {
+        int l = 0;
+        while (token[l] != ' ') {
+            l++;
+        }
+
+        char n1[8], n2[8];
+
+        for (int i = 0; i < j; i++) {
+            n1[i] = token[i];
+        }
+
+        int k = 0;
+        for (int i = j+1; i < strlen(token); i++) {
+            n2[k++] = token[i];
+        }
+        int num1 = atoi(n1);
+        int num2 = atoi(n2);
+        
+        for (int i = num1; i < num1+num2; i++) {
+            result[j++] = str[i];
+        }
+        result[j++] = ' ';
+        token = strtok(NULL, "$");
+    }
+
+    FILE *f = fopen("files/result.txt", "w+");
+    fputs(result, f);
+    fclose(f);
+    return 0;
+
 }
+
+
+
