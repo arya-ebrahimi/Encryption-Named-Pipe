@@ -1,4 +1,4 @@
-# encryption-named-pipe \n
-mkdir build && cd build \n
-cmake .. \n
+# encryption-named-pipe 
+mkdir build && cd build 
+cmake .. 
 make
