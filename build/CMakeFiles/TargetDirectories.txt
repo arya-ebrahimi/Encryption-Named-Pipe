@@ -1,5 +1,0 @@
-/home/arya/Desktop/os_project/build/CMakeFiles/rebuild_cache.dir
-/home/arya/Desktop/os_project/build/CMakeFiles/edit_cache.dir
-/home/arya/Desktop/os_project/build/CMakeFiles/main.dir
-/home/arya/Desktop/os_project/build/CMakeFiles/finder.dir
-/home/arya/Desktop/os_project/build/CMakeFiles/decoder.dir
