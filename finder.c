@@ -54,6 +54,13 @@ int main() {
     FILE *f = fopen("files/result.txt", "w+");
     fputs(result, f);
     fclose(f);
+
+    char * pipe_bc = "/tmp/pipe_bc";
+    mkfifo(pipe_bc, 0777);
+    int fd = open(pipe_bc, O_WRONLY);
+    write(fd, result, strlen(result)+1);
+    close(fd);
+
     return 0;
 
 }
