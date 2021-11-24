@@ -80,7 +80,7 @@ int main() {
         }
 
         char * pipe_a = "/tmp/pipe_a";
-        mkfifo(pipe_a, 0777);
+        mkfifo(pipe_a, 0666);
         int fd = open(pipe_a, O_WRONLY);
         write(fd, ptr, strlen(ptr)+1);
         close(fd);
@@ -92,7 +92,7 @@ int main() {
         fputs(ptr2, output);
         fclose(output);
         char *pipe_b = "/tmp/pipe_b";
-        mkfifo(pipe_b, 0777);
+        mkfifo(pipe_b, 0666);
         int fd2 = open(pipe_b, O_WRONLY);
         write(fd2, ptr2, strlen(ptr2)+1);
         close(fd2);
@@ -101,7 +101,7 @@ int main() {
 
 
         char *pipe_c = "/tmp/pipe_c";
-        mkfifo(pipe_c, 0777);
+        mkfifo(pipe_c, 0666);
         int fd3 = open(pipe_c, O_WRONLY);
         write(fd3, ptr3, strlen(ptr3)+1);
         close(fd3);

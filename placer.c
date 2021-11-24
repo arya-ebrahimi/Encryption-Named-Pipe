@@ -9,17 +9,17 @@
 int main() {
     
     const char *pipe_bc = "/tmp/pipe_bc";
+    mkfifo(pipe_bc, 0666);
+
     int fd = open(pipe_bc, O_RDONLY);
     char str[100];
     read(fd, str, 100);
-    close(fd);
-    const char *pipe_file2 = "/tmp/pipe_c";
-    int fd2 = open(pipe_file2, O_RDONLY);
+    const char *pipe_c = "/tmp/pipe_c";
+    mkfifo(pipe_c, 0666);
+
+    int fd2 = open(pipe_c, O_RDONLY);
     char str2[100];
     read(fd2, str2, 100);
-    close(fd2);
-
-    sleep(4);
 
     char result[200] = "";
 
@@ -30,6 +30,7 @@ int main() {
             while (str[k] != ' ') {
                 result[j++] = str[k++];
             }
+            k++;
             
         } else {
             result[j++] = str2[i];
@@ -39,6 +40,9 @@ int main() {
     FILE *f = fopen("files/placer.txt", "w+");
     fputs(result, f);
     fclose(f);
+
+    close(fd);
+    close(fd2);
 
     return 0;
 

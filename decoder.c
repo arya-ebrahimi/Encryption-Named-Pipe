@@ -9,11 +9,12 @@
 int main() {
     
     const char *pipe_file = "/tmp/pipe_a";
+    mkfifo(pipe_file, 0666);
+
     int fd = open(pipe_file, O_RDONLY);
     char str[100];
 
     read(fd, str, 100);
-    close(fd);
 
     for (int i = 0; i<strlen(str); i++) {
         if ((str[i] > 67 && str[i] < 91) || ((str[i] > 99 && str[i] < 123))) {
@@ -27,10 +28,13 @@ int main() {
     f = fopen("files/file_decoder.txt", "w+");
     fputs(str, f);
     fclose(f);
-    mkfifo("/tmp/pipe_ab", 0777);
-    fd = open("/tmp/pipe_ab", O_WRONLY);
-    write(fd, str, strlen(str)+1);
+    mkfifo("/tmp/pipe_ab", 0666);
+    int fd2 = open("/tmp/pipe_ab", O_WRONLY);
+    write(fd2, str, strlen(str)+1);
+
     close(fd);
+    close(fd2);
+
 
     return 0;
 }
