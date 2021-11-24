@@ -28,7 +28,6 @@ int main() {
     f = fopen("files/file_decoder.txt", "w+");
     fputs(str, f);
     fclose(f);
-
     mkfifo("/tmp/pipe_ab", 0777);
     fd = open("/tmp/pipe_ab", O_WRONLY);
     write(fd, str, strlen(str));

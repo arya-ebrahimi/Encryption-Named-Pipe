@@ -6,5 +6,6 @@ project(os_project C)
 
 add_executable(decoder decoder.c)
 add_executable(finder finder.c)
+add_executable(placer placer.c)
 add_executable(main main.c)
 

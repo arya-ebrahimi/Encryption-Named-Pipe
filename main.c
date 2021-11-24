@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+
 int main() {
 
     pid_t process_a;
@@ -16,7 +17,7 @@ int main() {
 
     process_a = fork();
     process_b = fork();
-    // process_c = fork();
+    process_c = fork();
 
     if (process_a == 0) {
         //child a (decoder)
@@ -28,8 +29,10 @@ int main() {
         char * argv_list[2] = {"./build/finder", NULL};
         execv(argv_list[0], argv_list);
 
-    // } else if (process_c == 0) {
-    //     //child c (placer)
+    } else if (process_c == 0) {
+        //child c (placer)
+        char * argv_list[2] = {"./build/placer", NULL};
+        execv(argv_list[0], argv_list);
     } else {
         //parent
         char * pipe_a = "/tmp/pipe_a";
@@ -38,9 +41,10 @@ int main() {
         char *ptr = "decoderdecoderdecoderdecoder";
         write(fd, ptr, strlen(ptr)+1);
         close(fd);
+
         waitpid(process_a, &status, 0);
 
-        char * pipe_b = "/tmp/pipe_b";
+        char *pipe_b = "/tmp/pipe_b";
         mkfifo(pipe_b, 0777);
         int fd2 = open(pipe_b, O_WRONLY);
         char *ptr2 = "0 2$3 5";
@@ -50,15 +54,15 @@ int main() {
         waitpid(process_b, &status, 0);
 
 
-        // waitpid(process_c, &status, 0);
+        char *pipe_c = "/tmp/pipe_c";
+        mkfifo(pipe_c, 0777);
+        int fd3 = open(pipe_c, O_WRONLY);
+        char *ptr3 = "0 2$4 4$";
+        write(fd3, ptr3, strlen(ptr3)+1);
+        close(fd3);
 
+        waitpid(process_c, &status, 0);
 
-        // char * pipe_b = "/tmp/pipe_b";
-        // mkfifo(pipe_b, 0777);
-        // fd = open(pipe_b, O_WRONLY);
-        // char *ptr2 = "0 2$4 4$";
-        // write(fd, ptr2, strlen(ptr2)+1);
-        // close(fd);
         return 0;
 
         
