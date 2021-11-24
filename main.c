@@ -17,8 +17,12 @@ int main() {
     int status;
 
     process_a = fork();
-    process_b = fork();
-    process_c = fork();
+    if (process_a > 0) {
+        process_b = fork();
+        if (process_b > 0) {
+            process_c = fork();
+        }
+    }
 
     if (process_a == 0) {
         //child a (decoder)
@@ -107,6 +111,11 @@ int main() {
         close(fd3);
 
         waitpid(process_c, &status, 0);
+
+        free(ptr);
+        free(ptr2);
+        free(ptr3);
+
 
         return 0;
 
