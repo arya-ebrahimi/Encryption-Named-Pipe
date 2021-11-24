@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 int main() {
-
+    
     const char *pipe_bc = "/tmp/pipe_bc";
     int fd = open(pipe_bc, O_RDONLY);
     char str[100];
@@ -19,8 +19,25 @@ int main() {
     read(fd2, str2, 100);
     close(fd2);
 
+    sleep(4);
+
+    char result[200] = "";
+
+    int j = 0;
+    int k = 0;
+    for (int i = 0; i < strlen(str2); i++) {
+        if (str2[i] == '$') {
+            while (str[k] != ' ') {
+                result[j++] = str[k++];
+            }
+            
+        } else {
+            result[j++] = str2[i];
+        }
+    }
+
     FILE *f = fopen("files/placer.txt", "w+");
-    fputs(str, f);
+    fputs(result, f);
     fclose(f);
 
     return 0;

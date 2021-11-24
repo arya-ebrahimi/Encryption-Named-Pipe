@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -35,19 +36,64 @@ int main() {
         execv(argv_list[0], argv_list);
     } else {
         //parent
+
+        FILE *input = fopen("files/input.txt", "rb");
+        char *input_str;
+        if (input) {
+            fseek(input, 0, SEEK_END);
+            long length = ftell(input);
+            fseek(input, 0, SEEK_SET);
+            input_str = malloc (length);
+            if (input_str) {
+                fread(input_str, 1, length, input);
+            }
+            fclose(input);
+        }
+
+        char *token = strtok(input_str, "###");
+        char *ptr;
+        char *ptr2;
+        char *ptr3;
+        int counter = 0;
+        while (token != NULL)
+        {
+            switch (counter) {
+            case 0:
+                ptr = malloc (strlen(token));
+                strcpy(ptr, token);
+                break;
+            case 1:
+                ptr2 = malloc (strlen(token));
+                strcpy(ptr2, token);
+                break;
+            case 2:
+                ptr3 = malloc (strlen(token));
+                strcpy(ptr3, token);
+                break;
+            
+            default:
+                break;
+            }
+
+            counter++;
+            token = strtok(NULL, "###");
+        }
+
         char * pipe_a = "/tmp/pipe_a";
         mkfifo(pipe_a, 0777);
         int fd = open(pipe_a, O_WRONLY);
-        char *ptr = "decoderdecoderdecoderdecoder";
         write(fd, ptr, strlen(ptr)+1);
         close(fd);
 
         waitpid(process_a, &status, 0);
 
+        FILE *output = fopen("files/output.txt", "w+");
+        
+        fputs(ptr2, output);
+        fclose(output);
         char *pipe_b = "/tmp/pipe_b";
         mkfifo(pipe_b, 0777);
         int fd2 = open(pipe_b, O_WRONLY);
-        char *ptr2 = "0 2$3 5";
         write(fd2, ptr2, strlen(ptr2)+1);
         close(fd2);
 
@@ -57,7 +103,6 @@ int main() {
         char *pipe_c = "/tmp/pipe_c";
         mkfifo(pipe_c, 0777);
         int fd3 = open(pipe_c, O_WRONLY);
-        char *ptr3 = "0 2$4 4$";
         write(fd3, ptr3, strlen(ptr3)+1);
         close(fd3);
 

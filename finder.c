@@ -9,21 +9,23 @@
 
 int main() {
 
+    char index[100];
+    char decoded[100];
     const char *pipe_file2 = "/tmp/pipe_ab";
-    int fd2 = open(pipe_file2, O_RDONLY);
-    char str[100];
-    read(fd2, str, 100);
+    const char *pipe_file = "/tmp/pipe_b";
+    char *token = strtok(index, "$");
+    char result[200] = "";
+    int fd2, fd;
+
+    fd2 = open(pipe_file2, O_RDONLY);
+    read(fd2, decoded, 100);
     close(fd2);
 
-    const char *pipe_file = "/tmp/pipe_b";
-    int fd = open(pipe_file, O_RDONLY);
-    char str2[100];
-    read(fd, str2, 100);
+    fd = open(pipe_file, O_RDONLY);
+    read(fd, index, 100);
     close(fd);
-    char *token = strtok(str2, "$");
-    char result[200] = "";
-
-    FILE *f = fopen("files/result.txt", "w+");
+    
+    sleep(1);
 
     int j = 0;
     while (token != NULL)
@@ -45,17 +47,16 @@ int main() {
         }
         int num1 = atoi(n1);
         int num2 = atoi(n2);
-
-        printf("%d %d\n", num1, num2);
         
         for (int i = num1; i < num1+num2; i++) {
-            result[j++] = str[i];
+            result[j++] = decoded[i];
         }
         result[j++] = ' ';
         token = strtok(NULL, "$");
-    }
+    }   
 
-    fputs(result, f);
+    FILE *f = fopen("files/result.txt", "w+");
+    fprintf(f, "%s", result);
     fclose(f);
 
     char * pipe_bc = "/tmp/pipe_bc";

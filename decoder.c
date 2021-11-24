@@ -15,7 +15,6 @@ int main() {
     read(fd, str, 100);
     close(fd);
 
-
     for (int i = 0; i<strlen(str); i++) {
         if ((str[i] > 67 && str[i] < 91) || ((str[i] > 99 && str[i] < 123))) {
            str[i] = str[i]-3;
@@ -30,7 +29,7 @@ int main() {
     fclose(f);
     mkfifo("/tmp/pipe_ab", 0777);
     fd = open("/tmp/pipe_ab", O_WRONLY);
-    write(fd, str, strlen(str));
+    write(fd, str, strlen(str)+1);
     close(fd);
 
     return 0;
