@@ -12,28 +12,28 @@ int main() {
     mkfifo(pipe_bc, 0666);
 
     int fd = open(pipe_bc, O_RDONLY);
-    char str[100];
-    read(fd, str, 100);
+    char decoded_words[100];
+    read(fd, decoded_words, 100);
     const char *pipe_c = "/tmp/pipe_c";
     mkfifo(pipe_c, 0666);
 
     int fd2 = open(pipe_c, O_RDONLY);
-    char str2[100];
-    read(fd2, str2, 100);
+    char main_text[100];
+    read(fd2, main_text, 100);
 
-    char result[200] = "";
+    char result[200];
 
     int j = 0;
     int k = 0;
-    for (int i = 0; i < strlen(str2); i++) {
-        if (str2[i] == '$') {
-            while (str[k] != ' ') {
-                result[j++] = str[k++];
+    for (int i = 0; i < strlen(main_text); i++) {
+        if (main_text[i] == '$') {
+            while (decoded_words[k] != ' ') {
+                result[j++] = decoded_words[k++];
             }
             k++;
             
         } else {
-            result[j++] = str2[i];
+            result[j++] = main_text[i];
         }
     }
 
