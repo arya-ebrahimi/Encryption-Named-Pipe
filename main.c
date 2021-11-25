@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#define SIZE 100
 
 int main() {
 
@@ -91,10 +92,7 @@ int main() {
 
         waitpid(process_a, &status, 0);
 
-        FILE *output = fopen("files/output.txt", "w+");
         
-        fputs(ptr2, output);
-        fclose(output);
         char *pipe_b = "/tmp/pipe_b";
         mkfifo(pipe_b, 0666);
         int fd2 = open(pipe_b, O_WRONLY);
@@ -110,7 +108,20 @@ int main() {
         write(fd3, ptr3, strlen(ptr3)+1);
         close(fd3);
 
+        mkfifo(pipe_c, 0666);
+        int fd4 = open(pipe_c, O_RDONLY);
+        char result[200];
+        read(fd4, result, sizeof(result)+1);
+        close(fd4);
+
         waitpid(process_c, &status, 0);
+
+        printf("%s", result);
+        FILE *output = fopen("files/output.txt", "w+");
+        
+        fputs(result, output);
+        fclose(output);
+
 
         free(ptr);
         free(ptr2);

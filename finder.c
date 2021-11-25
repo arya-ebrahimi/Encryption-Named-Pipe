@@ -6,25 +6,26 @@
 #include <unistd.h>
 #include <stdlib.h>  
 
+#define SIZE 100
 
 int main() {
 
-    char index[100];
-    char decoded[100];
+    char index[SIZE];
+    char decoded[SIZE];
 
     const char *pipe_ab = "/tmp/pipe_ab";
     const char *pipe_b = "/tmp/pipe_b";
     mkfifo(pipe_b, 0666);
     mkfifo(pipe_ab, 0666);
 
-    char result[200] = "";
+    char result[2*SIZE] = "";
     int fd2, fd;
 
     fd2 = open(pipe_ab, O_RDONLY);
-    read(fd2, decoded, 100);
+    read(fd2, decoded, SIZE);
 
     fd = open(pipe_b, O_RDONLY);
-    read(fd, index, 100);
+    read(fd, index, SIZE);
     char *token = strtok(index, "$");
     
     int j = 0;
@@ -55,7 +56,7 @@ int main() {
         token = strtok(NULL, "$");
     }   
 
-    FILE *f = fopen("files/result.txt", "w+");
+    FILE *f = fopen("files/finder_words.txt", "w+");
     fputs(result, f);
     fclose(f);
 
@@ -64,7 +65,7 @@ int main() {
     int fd3 = open(pipe_bc, O_WRONLY);
     write(fd3, result, strlen(result)+1);
 
-    // close(fd3);
+    close(fd3);
     close(fd2);
     close(fd);
 

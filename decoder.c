@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define SIZE 100
+
 
 int main() {
     
@@ -12,10 +14,10 @@ int main() {
     mkfifo(pipe_file, 0666);
 
     int fd = open(pipe_file, O_RDONLY);
-    char str[100];
+    char str[SIZE];
 
-    read(fd, str, 100);
-    char result[200] = "";
+    read(fd, str, SIZE);
+    char result[2*SIZE] = "";
     int j = 0;
 
     for (int i = 0; i<strlen(str); i++) {
